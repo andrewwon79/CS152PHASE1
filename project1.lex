@@ -55,7 +55,7 @@ COMMENTS [##]
 "]"     {printf("R_SQUARE_BRACKET\n"); currPos +=yyleng;}
 ":="     {printf("ASSIGN\n"); currPos +=yyleng;}
 {DIGIT}+       {printf("NUMBER %s\n", yytext); currPos += yyleng;}
-{LETTER}({LETTER}|{DIGIT}|{UNDERSCORE})*({LETTER}|{DIGIT})*	{printf("IDENTIFIER %s\n", yytext);currPos+=yyleng;}
+{LETTER}({LETTER}|{DIGIT}|{UNDERSCORE})*({LETTER}|{DIGIT})+	{printf("IDENTIFIER %s\n", yytext);currPos+=yyleng;}
 [ \t]+         {/* ignore spaces */ currPos += yyleng;}
 {COMMENTS}.*	       {currLine++;currPos=1;}
 "\n"           {currLine++; currPos = 1;}
