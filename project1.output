@@ -1,0 +1,2244 @@
+Terminals unused in grammar
+
+   LT
+   GT
+   SUB
+   ADD
+   MULT
+   DIV
+   L_PAREN
+   R_PAREN
+   MOD
+   SEMICOLON
+   COLON
+   L_SQUARE_BRACKET
+   R_SQUARE_BRACKET
+
+
+State 50 conflicts: 4 reduce/reduce
+State 51 conflicts: 5 reduce/reduce
+State 53 conflicts: 14 reduce/reduce
+State 54 conflicts: 16 reduce/reduce
+
+
+Grammar
+
+    0 $accept: PROGRAM $end
+
+    1 PROGRAM: %empty
+    2        | FUNCTIONRULE PROGRAM
+
+    3 FUNCTIONRULE: FUNCTION IDENTIFIERRULE ';' BEGIN_PARAMS FUNCTIONRECRULE END_PARAMS BEGIN_LOCALS FUNCTIONRECRULE END_LOCALS BEGIN_BODY FUNCTIONREC2RULE END_BODY
+
+    4 FUNCTIONRECRULE: %empty
+    5                | DECLARATION ';' FUNCTIONRECRULE
+
+    6 FUNCTIONREC2RULE: %empty
+    7                 | STATEMENT ';' FUNCTIONREC2RULE
+
+    8 DECLARATION: DECLARATIONREC ':' INTEGER
+    9            | DECLARATIONREC ':' ARRAY '[' NUMBER ']' OF INTEGER
+   10            | DECLARATIONREC ':' ARRAY '[' NUMBER ']' '[' NUMBER ']' OF INTEGER
+
+   11 DECLARATIONREC: %empty
+   12               | IDENTIFIERRULE
+   13               | DECLARATIONREC ',' IDENTIFIERRULE
+
+   14 STATEMENT: VAR ASSIGN EXPRESSION
+   15          | IF BOOLEXPRESSION THEN IFREC ENDIF
+   16          | IF BOOLEXPRESSION THEN IFREC ELSE IFREC ENDIF
+   17          | WHILE BOOLEXPRESSION BEGINLOOP WHILEREC ENDLOOP
+   18          | DO BEGINLOOP DOREC ENDLOOP WHILE BOOLEXPRESSION
+   19          | FOR VAR ASSIGN NUMBER ';' BOOLEXPRESSION ';' VAR ASSIGN EXPRESSION BEGINLOOP FORREC ENDLOOP
+   20          | READ READREC
+   21          | WRITE WRITEREC
+   22          | VAR COMMA EXPRESSION
+   23          | VAR EXPRESSION
+   24          | CONTINUE
+   25          | RETURN EXPRESSION
+
+   26 IFREC: %empty
+   27      | STATEMENT ';' IFREC
+
+   28 WHILEREC: %empty
+   29         | STATEMENT ';' WHILEREC
+
+   30 DOREC: %empty
+   31      | STATEMENT ';' DOREC
+
+   32 FORREC: %empty
+   33       | STATEMENT ';' FORREC
+
+   34 READREC: %empty
+   35        | VAR
+   36        | VAR ',' READREC
+
+   37 WRITEREC: %empty
+   38         | VAR
+   39         | VAR ',' WRITEREC
+
+   40 BOOLEXPRESSION: RELATIONANDEXPRESSION
+   41               | RELATIONANDEXPRESSION BOOLEXPRESSIONREC
+
+   42 BOOLEXPRESSIONREC: %empty
+   43                  | BOOLEXPRESSIONREC OR RELATIONANDEXPRESSION
+
+   44 RELATIONANDEXPRESSION: RELATIONEXPRESSION
+   45                      | RELATIONEXPRESSION RELATIONANDEXPRESSIONREC
+
+   46 RELATIONANDEXPRESSIONREC: %empty
+   47                         | RELATIONANDEXPRESSIONREC AND RELATIONEXPRESSION
+
+   48 RELATIONEXPRESSION: EXPRESSION COMPARATOR EXPRESSION
+   49                   | TRUE
+   50                   | FALSE
+   51                   | '(' BOOLEXPRESSION ')'
+   52                   | NOT EXPRESSION COMPARATOR EXPRESSION
+   53                   | NOT TRUE
+   54                   | NOT FALSE
+   55                   | NOT '(' BOOLEXPRESSION ')'
+
+   56 COMPARATOR: EQ
+   57           | NEQ
+   58           | '<'
+   59           | '>'
+   60           | LTE
+   61           | GTE
+
+   62 EXPRESSION: MULTIPLICATIVEEXPRESSION
+   63           | MULTIPLICATIVEEXPRESSION EXPRESSIONREC
+
+   64 EXPRESSIONREC: %empty
+   65              | EXPRESSIONREC '+' MULTIPLICATIVEEXPRESSION
+   66              | EXPRESSIONREC '-' MULTIPLICATIVEEXPRESSION
+
+   67 MULTIPLICATIVEEXPRESSION: TERM
+   68                         | TERM MULTIPLICATIVEEXPRESSIONTERM
+
+   69 MULTIPLICATIVEEXPRESSIONTERM: %empty
+   70                             | '*' TERM MULTIPLICATIVEEXPRESSIONTERM
+   71                             | '/' TERM MULTIPLICATIVEEXPRESSIONTERM
+   72                             | '%' TERM MULTIPLICATIVEEXPRESSIONTERM
+
+   73 TERM: IDENTIFIERRULE '(' TERMEXP ')'
+   74     | NUMBER
+   75     | VAR
+   76     | '(' EXPRESSION ')'
+   77     | '-' NUMBER
+   78     | '-' VAR
+   79     | '-' '(' EXPRESSION ')'
+
+   80 TERMEXP: %empty
+   81        | EXPRESSION
+   82        | EXPRESSION ',' TERMEXP
+
+   83 VAR: IDENTIFIERRULE
+   84    | IDENTIFIERRULE '[' EXPRESSION ']'
+   85    | IDENTIFIERRULE '[' EXPRESSION ']' '[' EXPRESSION ']'
+
+   86 IDENTIFIERRULE: IDENTIFIER
+
+
+Terminals, with rules where they appear
+
+$end (0) 0
+'%' (37) 72
+'(' (40) 51 55 73 76 79
+')' (41) 51 55 73 76 79
+'*' (42) 70
+'+' (43) 65
+',' (44) 13 36 39 82
+'-' (45) 66 77 78 79
+'/' (47) 71
+':' (58) 8 9 10
+';' (59) 3 5 7 19 27 29 31 33
+'<' (60) 58
+'>' (62) 59
+'[' (91) 9 10 84 85
+']' (93) 9 10 84 85
+error (256)
+FUNCTION (258) 3
+BEGIN_PARAMS (259) 3
+END_PARAMS (260) 3
+BEGIN_LOCALS (261) 3
+END_LOCALS (262) 3
+BEGIN_BODY (263) 3
+END_BODY (264) 3
+INTEGER (265) 8 9 10
+ARRAY (266) 9 10
+OF (267) 9 10
+IF (268) 15 16
+THEN (269) 15 16
+ENDIF (270) 15 16
+ELSE (271) 16
+WHILE (272) 17 18
+DO (273) 18
+FOR (274) 19
+BEGINLOOP (275) 17 18 19
+ENDLOOP (276) 17 18 19
+CONTINUE (277) 24
+READ (278) 20
+WRITE (279) 21
+AND (280) 47
+OR (281) 43
+NOT (282) 52 53 54 55
+TRUE (283) 49 53
+FALSE (284) 50 54
+RETURN (285) 25
+NEQ (286) 57
+LT (287)
+GT (288)
+LTE (289) 60
+GTE (290) 61
+SUB (291)
+ADD (292)
+MULT (293)
+DIV (294)
+EQ (295) 56
+L_PAREN (296)
+R_PAREN (297)
+MOD (298)
+SEMICOLON (299)
+COLON (300)
+COMMA (301) 22
+L_SQUARE_BRACKET (302)
+R_SQUARE_BRACKET (303)
+ASSIGN (304) 14 19
+IDENTIFIER (305) 86
+NUMBER (306) 9 10 19 74 77
+
+
+Nonterminals, with rules where they appear
+
+$accept (66)
+    on left: 0
+PROGRAM (67)
+    on left: 1 2, on right: 0 2
+FUNCTIONRULE (68)
+    on left: 3, on right: 2
+FUNCTIONRECRULE (69)
+    on left: 4 5, on right: 3 5
+FUNCTIONREC2RULE (70)
+    on left: 6 7, on right: 3 7
+DECLARATION (71)
+    on left: 8 9 10, on right: 5
+DECLARATIONREC (72)
+    on left: 11 12 13, on right: 8 9 10 13
+STATEMENT (73)
+    on left: 14 15 16 17 18 19 20 21 22 23 24 25, on right: 7 27 29
+    31 33
+IFREC (74)
+    on left: 26 27, on right: 15 16 27
+WHILEREC (75)
+    on left: 28 29, on right: 17 29
+DOREC (76)
+    on left: 30 31, on right: 18 31
+FORREC (77)
+    on left: 32 33, on right: 19 33
+READREC (78)
+    on left: 34 35 36, on right: 20 36
+WRITEREC (79)
+    on left: 37 38 39, on right: 21 39
+BOOLEXPRESSION (80)
+    on left: 40 41, on right: 15 16 17 18 19 51 55
+BOOLEXPRESSIONREC (81)
+    on left: 42 43, on right: 41 43
+RELATIONANDEXPRESSION (82)
+    on left: 44 45, on right: 40 41 43
+RELATIONANDEXPRESSIONREC (83)
+    on left: 46 47, on right: 45 47
+RELATIONEXPRESSION (84)
+    on left: 48 49 50 51 52 53 54 55, on right: 44 45 47
+COMPARATOR (85)
+    on left: 56 57 58 59 60 61, on right: 48 52
+EXPRESSION (86)
+    on left: 62 63, on right: 14 19 22 23 25 48 52 76 79 81 82 84 85
+EXPRESSIONREC (87)
+    on left: 64 65 66, on right: 63 65 66
+MULTIPLICATIVEEXPRESSION (88)
+    on left: 67 68, on right: 62 63 65 66
+MULTIPLICATIVEEXPRESSIONTERM (89)
+    on left: 69 70 71 72, on right: 68 70 71 72
+TERM (90)
+    on left: 73 74 75 76 77 78 79, on right: 67 68 70 71 72
+TERMEXP (91)
+    on left: 80 81 82, on right: 73 82
+VAR (92)
+    on left: 83 84 85, on right: 14 19 22 23 35 36 38 39 75 78
+IDENTIFIERRULE (93)
+    on left: 86, on right: 3 12 13 73 83 84 85
+
+
+State 0
+
+    0 $accept: . PROGRAM $end
+
+    FUNCTION  shift, and go to state 1
+
+    $default  reduce using rule 1 (PROGRAM)
+
+    PROGRAM       go to state 2
+    FUNCTIONRULE  go to state 3
+
+
+State 1
+
+    3 FUNCTIONRULE: FUNCTION . IDENTIFIERRULE ';' BEGIN_PARAMS FUNCTIONRECRULE END_PARAMS BEGIN_LOCALS FUNCTIONRECRULE END_LOCALS BEGIN_BODY FUNCTIONREC2RULE END_BODY
+
+    IDENTIFIER  shift, and go to state 4
+
+    IDENTIFIERRULE  go to state 5
+
+
+State 2
+
+    0 $accept: PROGRAM . $end
+
+    $end  shift, and go to state 6
+
+
+State 3
+
+    2 PROGRAM: FUNCTIONRULE . PROGRAM
+
+    FUNCTION  shift, and go to state 1
+
+    $default  reduce using rule 1 (PROGRAM)
+
+    PROGRAM       go to state 7
+    FUNCTIONRULE  go to state 3
+
+
+State 4
+
+   86 IDENTIFIERRULE: IDENTIFIER .
+
+    $default  reduce using rule 86 (IDENTIFIERRULE)
+
+
+State 5
+
+    3 FUNCTIONRULE: FUNCTION IDENTIFIERRULE . ';' BEGIN_PARAMS FUNCTIONRECRULE END_PARAMS BEGIN_LOCALS FUNCTIONRECRULE END_LOCALS BEGIN_BODY FUNCTIONREC2RULE END_BODY
+
+    ';'  shift, and go to state 8
+
+
+State 6
+
+    0 $accept: PROGRAM $end .
+
+    $default  accept
+
+
+State 7
+
+    2 PROGRAM: FUNCTIONRULE PROGRAM .
+
+    $default  reduce using rule 2 (PROGRAM)
+
+
+State 8
+
+    3 FUNCTIONRULE: FUNCTION IDENTIFIERRULE ';' . BEGIN_PARAMS FUNCTIONRECRULE END_PARAMS BEGIN_LOCALS FUNCTIONRECRULE END_LOCALS BEGIN_BODY FUNCTIONREC2RULE END_BODY
+
+    BEGIN_PARAMS  shift, and go to state 9
+
+
+State 9
+
+    3 FUNCTIONRULE: FUNCTION IDENTIFIERRULE ';' BEGIN_PARAMS . FUNCTIONRECRULE END_PARAMS BEGIN_LOCALS FUNCTIONRECRULE END_LOCALS BEGIN_BODY FUNCTIONREC2RULE END_BODY
+
+    IDENTIFIER  shift, and go to state 4
+
+    END_PARAMS  reduce using rule 4 (FUNCTIONRECRULE)
+    $default    reduce using rule 11 (DECLARATIONREC)
+
+    FUNCTIONRECRULE  go to state 10
+    DECLARATION      go to state 11
+    DECLARATIONREC   go to state 12
+    IDENTIFIERRULE   go to state 13
+
+
+State 10
+
+    3 FUNCTIONRULE: FUNCTION IDENTIFIERRULE ';' BEGIN_PARAMS FUNCTIONRECRULE . END_PARAMS BEGIN_LOCALS FUNCTIONRECRULE END_LOCALS BEGIN_BODY FUNCTIONREC2RULE END_BODY
+
+    END_PARAMS  shift, and go to state 14
+
+
+State 11
+
+    5 FUNCTIONRECRULE: DECLARATION . ';' FUNCTIONRECRULE
+
+    ';'  shift, and go to state 15
+
+
+State 12
+
+    8 DECLARATION: DECLARATIONREC . ':' INTEGER
+    9            | DECLARATIONREC . ':' ARRAY '[' NUMBER ']' OF INTEGER
+   10            | DECLARATIONREC . ':' ARRAY '[' NUMBER ']' '[' NUMBER ']' OF INTEGER
+   13 DECLARATIONREC: DECLARATIONREC . ',' IDENTIFIERRULE
+
+    ':'  shift, and go to state 16
+    ','  shift, and go to state 17
+
+
+State 13
+
+   12 DECLARATIONREC: IDENTIFIERRULE .
+
+    $default  reduce using rule 12 (DECLARATIONREC)
+
+
+State 14
+
+    3 FUNCTIONRULE: FUNCTION IDENTIFIERRULE ';' BEGIN_PARAMS FUNCTIONRECRULE END_PARAMS . BEGIN_LOCALS FUNCTIONRECRULE END_LOCALS BEGIN_BODY FUNCTIONREC2RULE END_BODY
+
+    BEGIN_LOCALS  shift, and go to state 18
+
+
+State 15
+
+    5 FUNCTIONRECRULE: DECLARATION ';' . FUNCTIONRECRULE
+
+    IDENTIFIER  shift, and go to state 4
+
+    ':'       reduce using rule 11 (DECLARATIONREC)
+    ','       reduce using rule 11 (DECLARATIONREC)
+    $default  reduce using rule 4 (FUNCTIONRECRULE)
+
+    FUNCTIONRECRULE  go to state 19
+    DECLARATION      go to state 11
+    DECLARATIONREC   go to state 12
+    IDENTIFIERRULE   go to state 13
+
+
+State 16
+
+    8 DECLARATION: DECLARATIONREC ':' . INTEGER
+    9            | DECLARATIONREC ':' . ARRAY '[' NUMBER ']' OF INTEGER
+   10            | DECLARATIONREC ':' . ARRAY '[' NUMBER ']' '[' NUMBER ']' OF INTEGER
+
+    INTEGER  shift, and go to state 20
+    ARRAY    shift, and go to state 21
+
+
+State 17
+
+   13 DECLARATIONREC: DECLARATIONREC ',' . IDENTIFIERRULE
+
+    IDENTIFIER  shift, and go to state 4
+
+    IDENTIFIERRULE  go to state 22
+
+
+State 18
+
+    3 FUNCTIONRULE: FUNCTION IDENTIFIERRULE ';' BEGIN_PARAMS FUNCTIONRECRULE END_PARAMS BEGIN_LOCALS . FUNCTIONRECRULE END_LOCALS BEGIN_BODY FUNCTIONREC2RULE END_BODY
+
+    IDENTIFIER  shift, and go to state 4
+
+    END_LOCALS  reduce using rule 4 (FUNCTIONRECRULE)
+    $default    reduce using rule 11 (DECLARATIONREC)
+
+    FUNCTIONRECRULE  go to state 23
+    DECLARATION      go to state 11
+    DECLARATIONREC   go to state 12
+    IDENTIFIERRULE   go to state 13
+
+
+State 19
+
+    5 FUNCTIONRECRULE: DECLARATION ';' FUNCTIONRECRULE .
+
+    $default  reduce using rule 5 (FUNCTIONRECRULE)
+
+
+State 20
+
+    8 DECLARATION: DECLARATIONREC ':' INTEGER .
+
+    $default  reduce using rule 8 (DECLARATION)
+
+
+State 21
+
+    9 DECLARATION: DECLARATIONREC ':' ARRAY . '[' NUMBER ']' OF INTEGER
+   10            | DECLARATIONREC ':' ARRAY . '[' NUMBER ']' '[' NUMBER ']' OF INTEGER
+
+    '['  shift, and go to state 24
+
+
+State 22
+
+   13 DECLARATIONREC: DECLARATIONREC ',' IDENTIFIERRULE .
+
+    $default  reduce using rule 13 (DECLARATIONREC)
+
+
+State 23
+
+    3 FUNCTIONRULE: FUNCTION IDENTIFIERRULE ';' BEGIN_PARAMS FUNCTIONRECRULE END_PARAMS BEGIN_LOCALS FUNCTIONRECRULE . END_LOCALS BEGIN_BODY FUNCTIONREC2RULE END_BODY
+
+    END_LOCALS  shift, and go to state 25
+
+
+State 24
+
+    9 DECLARATION: DECLARATIONREC ':' ARRAY '[' . NUMBER ']' OF INTEGER
+   10            | DECLARATIONREC ':' ARRAY '[' . NUMBER ']' '[' NUMBER ']' OF INTEGER
+
+    NUMBER  shift, and go to state 26
+
+
+State 25
+
+    3 FUNCTIONRULE: FUNCTION IDENTIFIERRULE ';' BEGIN_PARAMS FUNCTIONRECRULE END_PARAMS BEGIN_LOCALS FUNCTIONRECRULE END_LOCALS . BEGIN_BODY FUNCTIONREC2RULE END_BODY
+
+    BEGIN_BODY  shift, and go to state 27
+
+
+State 26
+
+    9 DECLARATION: DECLARATIONREC ':' ARRAY '[' NUMBER . ']' OF INTEGER
+   10            | DECLARATIONREC ':' ARRAY '[' NUMBER . ']' '[' NUMBER ']' OF INTEGER
+
+    ']'  shift, and go to state 28
+
+
+State 27
+
+    3 FUNCTIONRULE: FUNCTION IDENTIFIERRULE ';' BEGIN_PARAMS FUNCTIONRECRULE END_PARAMS BEGIN_LOCALS FUNCTIONRECRULE END_LOCALS BEGIN_BODY . FUNCTIONREC2RULE END_BODY
+
+    IF          shift, and go to state 29
+    WHILE       shift, and go to state 30
+    DO          shift, and go to state 31
+    FOR         shift, and go to state 32
+    CONTINUE    shift, and go to state 33
+    READ        shift, and go to state 34
+    WRITE       shift, and go to state 35
+    RETURN      shift, and go to state 36
+    IDENTIFIER  shift, and go to state 4
+
+    $default  reduce using rule 6 (FUNCTIONREC2RULE)
+
+    FUNCTIONREC2RULE  go to state 37
+    STATEMENT         go to state 38
+    VAR               go to state 39
+    IDENTIFIERRULE    go to state 40
+
+
+State 28
+
+    9 DECLARATION: DECLARATIONREC ':' ARRAY '[' NUMBER ']' . OF INTEGER
+   10            | DECLARATIONREC ':' ARRAY '[' NUMBER ']' . '[' NUMBER ']' OF INTEGER
+
+    OF   shift, and go to state 41
+    '['  shift, and go to state 42
+
+
+State 29
+
+   15 STATEMENT: IF . BOOLEXPRESSION THEN IFREC ENDIF
+   16          | IF . BOOLEXPRESSION THEN IFREC ELSE IFREC ENDIF
+
+    NOT         shift, and go to state 43
+    TRUE        shift, and go to state 44
+    FALSE       shift, and go to state 45
+    IDENTIFIER  shift, and go to state 4
+    NUMBER      shift, and go to state 46
+    '-'         shift, and go to state 47
+    '('         shift, and go to state 48
+
+    BOOLEXPRESSION            go to state 49
+    RELATIONANDEXPRESSION     go to state 50
+    RELATIONEXPRESSION        go to state 51
+    EXPRESSION                go to state 52
+    MULTIPLICATIVEEXPRESSION  go to state 53
+    TERM                      go to state 54
+    VAR                       go to state 55
+    IDENTIFIERRULE            go to state 56
+
+
+State 30
+
+   17 STATEMENT: WHILE . BOOLEXPRESSION BEGINLOOP WHILEREC ENDLOOP
+
+    NOT         shift, and go to state 43
+    TRUE        shift, and go to state 44
+    FALSE       shift, and go to state 45
+    IDENTIFIER  shift, and go to state 4
+    NUMBER      shift, and go to state 46
+    '-'         shift, and go to state 47
+    '('         shift, and go to state 48
+
+    BOOLEXPRESSION            go to state 57
+    RELATIONANDEXPRESSION     go to state 50
+    RELATIONEXPRESSION        go to state 51
+    EXPRESSION                go to state 52
+    MULTIPLICATIVEEXPRESSION  go to state 53
+    TERM                      go to state 54
+    VAR                       go to state 55
+    IDENTIFIERRULE            go to state 56
+
+
+State 31
+
+   18 STATEMENT: DO . BEGINLOOP DOREC ENDLOOP WHILE BOOLEXPRESSION
+
+    BEGINLOOP  shift, and go to state 58
+
+
+State 32
+
+   19 STATEMENT: FOR . VAR ASSIGN NUMBER ';' BOOLEXPRESSION ';' VAR ASSIGN EXPRESSION BEGINLOOP FORREC ENDLOOP
+
+    IDENTIFIER  shift, and go to state 4
+
+    VAR             go to state 59
+    IDENTIFIERRULE  go to state 40
+
+
+State 33
+
+   24 STATEMENT: CONTINUE .
+
+    $default  reduce using rule 24 (STATEMENT)
+
+
+State 34
+
+   20 STATEMENT: READ . READREC
+
+    IDENTIFIER  shift, and go to state 4
+
+    $default  reduce using rule 34 (READREC)
+
+    READREC         go to state 60
+    VAR             go to state 61
+    IDENTIFIERRULE  go to state 40
+
+
+State 35
+
+   21 STATEMENT: WRITE . WRITEREC
+
+    IDENTIFIER  shift, and go to state 4
+
+    $default  reduce using rule 37 (WRITEREC)
+
+    WRITEREC        go to state 62
+    VAR             go to state 63
+    IDENTIFIERRULE  go to state 40
+
+
+State 36
+
+   25 STATEMENT: RETURN . EXPRESSION
+
+    IDENTIFIER  shift, and go to state 4
+    NUMBER      shift, and go to state 46
+    '-'         shift, and go to state 47
+    '('         shift, and go to state 64
+
+    EXPRESSION                go to state 65
+    MULTIPLICATIVEEXPRESSION  go to state 53
+    TERM                      go to state 54
+    VAR                       go to state 55
+    IDENTIFIERRULE            go to state 56
+
+
+State 37
+
+    3 FUNCTIONRULE: FUNCTION IDENTIFIERRULE ';' BEGIN_PARAMS FUNCTIONRECRULE END_PARAMS BEGIN_LOCALS FUNCTIONRECRULE END_LOCALS BEGIN_BODY FUNCTIONREC2RULE . END_BODY
+
+    END_BODY  shift, and go to state 66
+
+
+State 38
+
+    7 FUNCTIONREC2RULE: STATEMENT . ';' FUNCTIONREC2RULE
+
+    ';'  shift, and go to state 67
+
+
+State 39
+
+   14 STATEMENT: VAR . ASSIGN EXPRESSION
+   22          | VAR . COMMA EXPRESSION
+   23          | VAR . EXPRESSION
+
+    COMMA       shift, and go to state 68
+    ASSIGN      shift, and go to state 69
+    IDENTIFIER  shift, and go to state 4
+    NUMBER      shift, and go to state 46
+    '-'         shift, and go to state 47
+    '('         shift, and go to state 64
+
+    EXPRESSION                go to state 70
+    MULTIPLICATIVEEXPRESSION  go to state 53
+    TERM                      go to state 54
+    VAR                       go to state 55
+    IDENTIFIERRULE            go to state 56
+
+
+State 40
+
+   83 VAR: IDENTIFIERRULE .
+   84    | IDENTIFIERRULE . '[' EXPRESSION ']'
+   85    | IDENTIFIERRULE . '[' EXPRESSION ']' '[' EXPRESSION ']'
+
+    '['  shift, and go to state 71
+
+    $default  reduce using rule 83 (VAR)
+
+
+State 41
+
+    9 DECLARATION: DECLARATIONREC ':' ARRAY '[' NUMBER ']' OF . INTEGER
+
+    INTEGER  shift, and go to state 72
+
+
+State 42
+
+   10 DECLARATION: DECLARATIONREC ':' ARRAY '[' NUMBER ']' '[' . NUMBER ']' OF INTEGER
+
+    NUMBER  shift, and go to state 73
+
+
+State 43
+
+   52 RELATIONEXPRESSION: NOT . EXPRESSION COMPARATOR EXPRESSION
+   53                   | NOT . TRUE
+   54                   | NOT . FALSE
+   55                   | NOT . '(' BOOLEXPRESSION ')'
+
+    TRUE        shift, and go to state 74
+    FALSE       shift, and go to state 75
+    IDENTIFIER  shift, and go to state 4
+    NUMBER      shift, and go to state 46
+    '-'         shift, and go to state 47
+    '('         shift, and go to state 76
+
+    EXPRESSION                go to state 77
+    MULTIPLICATIVEEXPRESSION  go to state 53
+    TERM                      go to state 54
+    VAR                       go to state 55
+    IDENTIFIERRULE            go to state 56
+
+
+State 44
+
+   49 RELATIONEXPRESSION: TRUE .
+
+    $default  reduce using rule 49 (RELATIONEXPRESSION)
+
+
+State 45
+
+   50 RELATIONEXPRESSION: FALSE .
+
+    $default  reduce using rule 50 (RELATIONEXPRESSION)
+
+
+State 46
+
+   74 TERM: NUMBER .
+
+    $default  reduce using rule 74 (TERM)
+
+
+State 47
+
+   77 TERM: '-' . NUMBER
+   78     | '-' . VAR
+   79     | '-' . '(' EXPRESSION ')'
+
+    IDENTIFIER  shift, and go to state 4
+    NUMBER      shift, and go to state 78
+    '('         shift, and go to state 79
+
+    VAR             go to state 80
+    IDENTIFIERRULE  go to state 40
+
+
+State 48
+
+   51 RELATIONEXPRESSION: '(' . BOOLEXPRESSION ')'
+   76 TERM: '(' . EXPRESSION ')'
+
+    NOT         shift, and go to state 43
+    TRUE        shift, and go to state 44
+    FALSE       shift, and go to state 45
+    IDENTIFIER  shift, and go to state 4
+    NUMBER      shift, and go to state 46
+    '-'         shift, and go to state 47
+    '('         shift, and go to state 48
+
+    BOOLEXPRESSION            go to state 81
+    RELATIONANDEXPRESSION     go to state 50
+    RELATIONEXPRESSION        go to state 51
+    EXPRESSION                go to state 82
+    MULTIPLICATIVEEXPRESSION  go to state 53
+    TERM                      go to state 54
+    VAR                       go to state 55
+    IDENTIFIERRULE            go to state 56
+
+
+State 49
+
+   15 STATEMENT: IF BOOLEXPRESSION . THEN IFREC ENDIF
+   16          | IF BOOLEXPRESSION . THEN IFREC ELSE IFREC ENDIF
+
+    THEN  shift, and go to state 83
+
+
+State 50
+
+   40 BOOLEXPRESSION: RELATIONANDEXPRESSION .
+   41               | RELATIONANDEXPRESSION . BOOLEXPRESSIONREC
+
+    THEN       reduce using rule 40 (BOOLEXPRESSION)
+    THEN       [reduce using rule 42 (BOOLEXPRESSIONREC)]
+    BEGINLOOP  reduce using rule 40 (BOOLEXPRESSION)
+    BEGINLOOP  [reduce using rule 42 (BOOLEXPRESSIONREC)]
+    OR         reduce using rule 42 (BOOLEXPRESSIONREC)
+    ';'        reduce using rule 40 (BOOLEXPRESSION)
+    ';'        [reduce using rule 42 (BOOLEXPRESSIONREC)]
+    ')'        reduce using rule 40 (BOOLEXPRESSION)
+    ')'        [reduce using rule 42 (BOOLEXPRESSIONREC)]
+    $default   reduce using rule 40 (BOOLEXPRESSION)
+
+    BOOLEXPRESSIONREC  go to state 84
+
+
+State 51
+
+   44 RELATIONANDEXPRESSION: RELATIONEXPRESSION .
+   45                      | RELATIONEXPRESSION . RELATIONANDEXPRESSIONREC
+
+    THEN       reduce using rule 44 (RELATIONANDEXPRESSION)
+    THEN       [reduce using rule 46 (RELATIONANDEXPRESSIONREC)]
+    BEGINLOOP  reduce using rule 44 (RELATIONANDEXPRESSION)
+    BEGINLOOP  [reduce using rule 46 (RELATIONANDEXPRESSIONREC)]
+    AND        reduce using rule 46 (RELATIONANDEXPRESSIONREC)
+    OR         reduce using rule 44 (RELATIONANDEXPRESSION)
+    OR         [reduce using rule 46 (RELATIONANDEXPRESSIONREC)]
+    ';'        reduce using rule 44 (RELATIONANDEXPRESSION)
+    ';'        [reduce using rule 46 (RELATIONANDEXPRESSIONREC)]
+    ')'        reduce using rule 44 (RELATIONANDEXPRESSION)
+    ')'        [reduce using rule 46 (RELATIONANDEXPRESSIONREC)]
+    $default   reduce using rule 44 (RELATIONANDEXPRESSION)
+
+    RELATIONANDEXPRESSIONREC  go to state 85
+
+
+State 52
+
+   48 RELATIONEXPRESSION: EXPRESSION . COMPARATOR EXPRESSION
+
+    NEQ  shift, and go to state 86
+    LTE  shift, and go to state 87
+    GTE  shift, and go to state 88
+    EQ   shift, and go to state 89
+    '<'  shift, and go to state 90
+    '>'  shift, and go to state 91
+
+    COMPARATOR  go to state 92
+
+
+State 53
+
+   62 EXPRESSION: MULTIPLICATIVEEXPRESSION .
+   63           | MULTIPLICATIVEEXPRESSION . EXPRESSIONREC
+
+    THEN       reduce using rule 62 (EXPRESSION)
+    THEN       [reduce using rule 64 (EXPRESSIONREC)]
+    BEGINLOOP  reduce using rule 62 (EXPRESSION)
+    BEGINLOOP  [reduce using rule 64 (EXPRESSIONREC)]
+    AND        reduce using rule 62 (EXPRESSION)
+    AND        [reduce using rule 64 (EXPRESSIONREC)]
+    OR         reduce using rule 62 (EXPRESSION)
+    OR         [reduce using rule 64 (EXPRESSIONREC)]
+    NEQ        reduce using rule 62 (EXPRESSION)
+    NEQ        [reduce using rule 64 (EXPRESSIONREC)]
+    LTE        reduce using rule 62 (EXPRESSION)
+    LTE        [reduce using rule 64 (EXPRESSIONREC)]
+    GTE        reduce using rule 62 (EXPRESSION)
+    GTE        [reduce using rule 64 (EXPRESSIONREC)]
+    EQ         reduce using rule 62 (EXPRESSION)
+    EQ         [reduce using rule 64 (EXPRESSIONREC)]
+    '-'        reduce using rule 64 (EXPRESSIONREC)
+    '+'        reduce using rule 64 (EXPRESSIONREC)
+    '<'        reduce using rule 62 (EXPRESSION)
+    '<'        [reduce using rule 64 (EXPRESSIONREC)]
+    '>'        reduce using rule 62 (EXPRESSION)
+    '>'        [reduce using rule 64 (EXPRESSIONREC)]
+    ';'        reduce using rule 62 (EXPRESSION)
+    ';'        [reduce using rule 64 (EXPRESSIONREC)]
+    ']'        reduce using rule 62 (EXPRESSION)
+    ']'        [reduce using rule 64 (EXPRESSIONREC)]
+    ','        reduce using rule 62 (EXPRESSION)
+    ','        [reduce using rule 64 (EXPRESSIONREC)]
+    ')'        reduce using rule 62 (EXPRESSION)
+    ')'        [reduce using rule 64 (EXPRESSIONREC)]
+    $default   reduce using rule 62 (EXPRESSION)
+
+    EXPRESSIONREC  go to state 93
+
+
+State 54
+
+   67 MULTIPLICATIVEEXPRESSION: TERM .
+   68                         | TERM . MULTIPLICATIVEEXPRESSIONTERM
+
+    '*'  shift, and go to state 94
+    '%'  shift, and go to state 95
+    '/'  shift, and go to state 96
+
+    THEN       reduce using rule 67 (MULTIPLICATIVEEXPRESSION)
+    THEN       [reduce using rule 69 (MULTIPLICATIVEEXPRESSIONTERM)]
+    BEGINLOOP  reduce using rule 67 (MULTIPLICATIVEEXPRESSION)
+    BEGINLOOP  [reduce using rule 69 (MULTIPLICATIVEEXPRESSIONTERM)]
+    AND        reduce using rule 67 (MULTIPLICATIVEEXPRESSION)
+    AND        [reduce using rule 69 (MULTIPLICATIVEEXPRESSIONTERM)]
+    OR         reduce using rule 67 (MULTIPLICATIVEEXPRESSION)
+    OR         [reduce using rule 69 (MULTIPLICATIVEEXPRESSIONTERM)]
+    NEQ        reduce using rule 67 (MULTIPLICATIVEEXPRESSION)
+    NEQ        [reduce using rule 69 (MULTIPLICATIVEEXPRESSIONTERM)]
+    LTE        reduce using rule 67 (MULTIPLICATIVEEXPRESSION)
+    LTE        [reduce using rule 69 (MULTIPLICATIVEEXPRESSIONTERM)]
+    GTE        reduce using rule 67 (MULTIPLICATIVEEXPRESSION)
+    GTE        [reduce using rule 69 (MULTIPLICATIVEEXPRESSIONTERM)]
+    EQ         reduce using rule 67 (MULTIPLICATIVEEXPRESSION)
+    EQ         [reduce using rule 69 (MULTIPLICATIVEEXPRESSIONTERM)]
+    '-'        reduce using rule 67 (MULTIPLICATIVEEXPRESSION)
+    '-'        [reduce using rule 69 (MULTIPLICATIVEEXPRESSIONTERM)]
+    '+'        reduce using rule 67 (MULTIPLICATIVEEXPRESSION)
+    '+'        [reduce using rule 69 (MULTIPLICATIVEEXPRESSIONTERM)]
+    '<'        reduce using rule 67 (MULTIPLICATIVEEXPRESSION)
+    '<'        [reduce using rule 69 (MULTIPLICATIVEEXPRESSIONTERM)]
+    '>'        reduce using rule 67 (MULTIPLICATIVEEXPRESSION)
+    '>'        [reduce using rule 69 (MULTIPLICATIVEEXPRESSIONTERM)]
+    ';'        reduce using rule 67 (MULTIPLICATIVEEXPRESSION)
+    ';'        [reduce using rule 69 (MULTIPLICATIVEEXPRESSIONTERM)]
+    ']'        reduce using rule 67 (MULTIPLICATIVEEXPRESSION)
+    ']'        [reduce using rule 69 (MULTIPLICATIVEEXPRESSIONTERM)]
+    ','        reduce using rule 67 (MULTIPLICATIVEEXPRESSION)
+    ','        [reduce using rule 69 (MULTIPLICATIVEEXPRESSIONTERM)]
+    ')'        reduce using rule 67 (MULTIPLICATIVEEXPRESSION)
+    ')'        [reduce using rule 69 (MULTIPLICATIVEEXPRESSIONTERM)]
+    $default   reduce using rule 67 (MULTIPLICATIVEEXPRESSION)
+
+    MULTIPLICATIVEEXPRESSIONTERM  go to state 97
+
+
+State 55
+
+   75 TERM: VAR .
+
+    $default  reduce using rule 75 (TERM)
+
+
+State 56
+
+   73 TERM: IDENTIFIERRULE . '(' TERMEXP ')'
+   83 VAR: IDENTIFIERRULE .
+   84    | IDENTIFIERRULE . '[' EXPRESSION ']'
+   85    | IDENTIFIERRULE . '[' EXPRESSION ']' '[' EXPRESSION ']'
+
+    '['  shift, and go to state 71
+    '('  shift, and go to state 98
+
+    $default  reduce using rule 83 (VAR)
+
+
+State 57
+
+   17 STATEMENT: WHILE BOOLEXPRESSION . BEGINLOOP WHILEREC ENDLOOP
+
+    BEGINLOOP  shift, and go to state 99
+
+
+State 58
+
+   18 STATEMENT: DO BEGINLOOP . DOREC ENDLOOP WHILE BOOLEXPRESSION
+
+    IF          shift, and go to state 29
+    WHILE       shift, and go to state 30
+    DO          shift, and go to state 31
+    FOR         shift, and go to state 32
+    CONTINUE    shift, and go to state 33
+    READ        shift, and go to state 34
+    WRITE       shift, and go to state 35
+    RETURN      shift, and go to state 36
+    IDENTIFIER  shift, and go to state 4
+
+    $default  reduce using rule 30 (DOREC)
+
+    STATEMENT       go to state 100
+    DOREC           go to state 101
+    VAR             go to state 39
+    IDENTIFIERRULE  go to state 40
+
+
+State 59
+
+   19 STATEMENT: FOR VAR . ASSIGN NUMBER ';' BOOLEXPRESSION ';' VAR ASSIGN EXPRESSION BEGINLOOP FORREC ENDLOOP
+
+    ASSIGN  shift, and go to state 102
+
+
+State 60
+
+   20 STATEMENT: READ READREC .
+
+    $default  reduce using rule 20 (STATEMENT)
+
+
+State 61
+
+   35 READREC: VAR .
+   36        | VAR . ',' READREC
+
+    ','  shift, and go to state 103
+
+    $default  reduce using rule 35 (READREC)
+
+
+State 62
+
+   21 STATEMENT: WRITE WRITEREC .
+
+    $default  reduce using rule 21 (STATEMENT)
+
+
+State 63
+
+   38 WRITEREC: VAR .
+   39         | VAR . ',' WRITEREC
+
+    ','  shift, and go to state 104
+
+    $default  reduce using rule 38 (WRITEREC)
+
+
+State 64
+
+   76 TERM: '(' . EXPRESSION ')'
+
+    IDENTIFIER  shift, and go to state 4
+    NUMBER      shift, and go to state 46
+    '-'         shift, and go to state 47
+    '('         shift, and go to state 64
+
+    EXPRESSION                go to state 105
+    MULTIPLICATIVEEXPRESSION  go to state 53
+    TERM                      go to state 54
+    VAR                       go to state 55
+    IDENTIFIERRULE            go to state 56
+
+
+State 65
+
+   25 STATEMENT: RETURN EXPRESSION .
+
+    $default  reduce using rule 25 (STATEMENT)
+
+
+State 66
+
+    3 FUNCTIONRULE: FUNCTION IDENTIFIERRULE ';' BEGIN_PARAMS FUNCTIONRECRULE END_PARAMS BEGIN_LOCALS FUNCTIONRECRULE END_LOCALS BEGIN_BODY FUNCTIONREC2RULE END_BODY .
+
+    $default  reduce using rule 3 (FUNCTIONRULE)
+
+
+State 67
+
+    7 FUNCTIONREC2RULE: STATEMENT ';' . FUNCTIONREC2RULE
+
+    IF          shift, and go to state 29
+    WHILE       shift, and go to state 30
+    DO          shift, and go to state 31
+    FOR         shift, and go to state 32
+    CONTINUE    shift, and go to state 33
+    READ        shift, and go to state 34
+    WRITE       shift, and go to state 35
+    RETURN      shift, and go to state 36
+    IDENTIFIER  shift, and go to state 4
+
+    $default  reduce using rule 6 (FUNCTIONREC2RULE)
+
+    FUNCTIONREC2RULE  go to state 106
+    STATEMENT         go to state 38
+    VAR               go to state 39
+    IDENTIFIERRULE    go to state 40
+
+
+State 68
+
+   22 STATEMENT: VAR COMMA . EXPRESSION
+
+    IDENTIFIER  shift, and go to state 4
+    NUMBER      shift, and go to state 46
+    '-'         shift, and go to state 47
+    '('         shift, and go to state 64
+
+    EXPRESSION                go to state 107
+    MULTIPLICATIVEEXPRESSION  go to state 53
+    TERM                      go to state 54
+    VAR                       go to state 55
+    IDENTIFIERRULE            go to state 56
+
+
+State 69
+
+   14 STATEMENT: VAR ASSIGN . EXPRESSION
+
+    IDENTIFIER  shift, and go to state 4
+    NUMBER      shift, and go to state 46
+    '-'         shift, and go to state 47
+    '('         shift, and go to state 64
+
+    EXPRESSION                go to state 108
+    MULTIPLICATIVEEXPRESSION  go to state 53
+    TERM                      go to state 54
+    VAR                       go to state 55
+    IDENTIFIERRULE            go to state 56
+
+
+State 70
+
+   23 STATEMENT: VAR EXPRESSION .
+
+    $default  reduce using rule 23 (STATEMENT)
+
+
+State 71
+
+   84 VAR: IDENTIFIERRULE '[' . EXPRESSION ']'
+   85    | IDENTIFIERRULE '[' . EXPRESSION ']' '[' EXPRESSION ']'
+
+    IDENTIFIER  shift, and go to state 4
+    NUMBER      shift, and go to state 46
+    '-'         shift, and go to state 47
+    '('         shift, and go to state 64
+
+    EXPRESSION                go to state 109
+    MULTIPLICATIVEEXPRESSION  go to state 53
+    TERM                      go to state 54
+    VAR                       go to state 55
+    IDENTIFIERRULE            go to state 56
+
+
+State 72
+
+    9 DECLARATION: DECLARATIONREC ':' ARRAY '[' NUMBER ']' OF INTEGER .
+
+    $default  reduce using rule 9 (DECLARATION)
+
+
+State 73
+
+   10 DECLARATION: DECLARATIONREC ':' ARRAY '[' NUMBER ']' '[' NUMBER . ']' OF INTEGER
+
+    ']'  shift, and go to state 110
+
+
+State 74
+
+   53 RELATIONEXPRESSION: NOT TRUE .
+
+    $default  reduce using rule 53 (RELATIONEXPRESSION)
+
+
+State 75
+
+   54 RELATIONEXPRESSION: NOT FALSE .
+
+    $default  reduce using rule 54 (RELATIONEXPRESSION)
+
+
+State 76
+
+   55 RELATIONEXPRESSION: NOT '(' . BOOLEXPRESSION ')'
+   76 TERM: '(' . EXPRESSION ')'
+
+    NOT         shift, and go to state 43
+    TRUE        shift, and go to state 44
+    FALSE       shift, and go to state 45
+    IDENTIFIER  shift, and go to state 4
+    NUMBER      shift, and go to state 46
+    '-'         shift, and go to state 47
+    '('         shift, and go to state 48
+
+    BOOLEXPRESSION            go to state 111
+    RELATIONANDEXPRESSION     go to state 50
+    RELATIONEXPRESSION        go to state 51
+    EXPRESSION                go to state 82
+    MULTIPLICATIVEEXPRESSION  go to state 53
+    TERM                      go to state 54
+    VAR                       go to state 55
+    IDENTIFIERRULE            go to state 56
+
+
+State 77
+
+   52 RELATIONEXPRESSION: NOT EXPRESSION . COMPARATOR EXPRESSION
+
+    NEQ  shift, and go to state 86
+    LTE  shift, and go to state 87
+    GTE  shift, and go to state 88
+    EQ   shift, and go to state 89
+    '<'  shift, and go to state 90
+    '>'  shift, and go to state 91
+
+    COMPARATOR  go to state 112
+
+
+State 78
+
+   77 TERM: '-' NUMBER .
+
+    $default  reduce using rule 77 (TERM)
+
+
+State 79
+
+   79 TERM: '-' '(' . EXPRESSION ')'
+
+    IDENTIFIER  shift, and go to state 4
+    NUMBER      shift, and go to state 46
+    '-'         shift, and go to state 47
+    '('         shift, and go to state 64
+
+    EXPRESSION                go to state 113
+    MULTIPLICATIVEEXPRESSION  go to state 53
+    TERM                      go to state 54
+    VAR                       go to state 55
+    IDENTIFIERRULE            go to state 56
+
+
+State 80
+
+   78 TERM: '-' VAR .
+
+    $default  reduce using rule 78 (TERM)
+
+
+State 81
+
+   51 RELATIONEXPRESSION: '(' BOOLEXPRESSION . ')'
+
+    ')'  shift, and go to state 114
+
+
+State 82
+
+   48 RELATIONEXPRESSION: EXPRESSION . COMPARATOR EXPRESSION
+   76 TERM: '(' EXPRESSION . ')'
+
+    NEQ  shift, and go to state 86
+    LTE  shift, and go to state 87
+    GTE  shift, and go to state 88
+    EQ   shift, and go to state 89
+    '<'  shift, and go to state 90
+    '>'  shift, and go to state 91
+    ')'  shift, and go to state 115
+
+    COMPARATOR  go to state 92
+
+
+State 83
+
+   15 STATEMENT: IF BOOLEXPRESSION THEN . IFREC ENDIF
+   16          | IF BOOLEXPRESSION THEN . IFREC ELSE IFREC ENDIF
+
+    IF          shift, and go to state 29
+    WHILE       shift, and go to state 30
+    DO          shift, and go to state 31
+    FOR         shift, and go to state 32
+    CONTINUE    shift, and go to state 33
+    READ        shift, and go to state 34
+    WRITE       shift, and go to state 35
+    RETURN      shift, and go to state 36
+    IDENTIFIER  shift, and go to state 4
+
+    $default  reduce using rule 26 (IFREC)
+
+    STATEMENT       go to state 116
+    IFREC           go to state 117
+    VAR             go to state 39
+    IDENTIFIERRULE  go to state 40
+
+
+State 84
+
+   41 BOOLEXPRESSION: RELATIONANDEXPRESSION BOOLEXPRESSIONREC .
+   43 BOOLEXPRESSIONREC: BOOLEXPRESSIONREC . OR RELATIONANDEXPRESSION
+
+    OR  shift, and go to state 118
+
+    $default  reduce using rule 41 (BOOLEXPRESSION)
+
+
+State 85
+
+   45 RELATIONANDEXPRESSION: RELATIONEXPRESSION RELATIONANDEXPRESSIONREC .
+   47 RELATIONANDEXPRESSIONREC: RELATIONANDEXPRESSIONREC . AND RELATIONEXPRESSION
+
+    AND  shift, and go to state 119
+
+    $default  reduce using rule 45 (RELATIONANDEXPRESSION)
+
+
+State 86
+
+   57 COMPARATOR: NEQ .
+
+    $default  reduce using rule 57 (COMPARATOR)
+
+
+State 87
+
+   60 COMPARATOR: LTE .
+
+    $default  reduce using rule 60 (COMPARATOR)
+
+
+State 88
+
+   61 COMPARATOR: GTE .
+
+    $default  reduce using rule 61 (COMPARATOR)
+
+
+State 89
+
+   56 COMPARATOR: EQ .
+
+    $default  reduce using rule 56 (COMPARATOR)
+
+
+State 90
+
+   58 COMPARATOR: '<' .
+
+    $default  reduce using rule 58 (COMPARATOR)
+
+
+State 91
+
+   59 COMPARATOR: '>' .
+
+    $default  reduce using rule 59 (COMPARATOR)
+
+
+State 92
+
+   48 RELATIONEXPRESSION: EXPRESSION COMPARATOR . EXPRESSION
+
+    IDENTIFIER  shift, and go to state 4
+    NUMBER      shift, and go to state 46
+    '-'         shift, and go to state 47
+    '('         shift, and go to state 64
+
+    EXPRESSION                go to state 120
+    MULTIPLICATIVEEXPRESSION  go to state 53
+    TERM                      go to state 54
+    VAR                       go to state 55
+    IDENTIFIERRULE            go to state 56
+
+
+State 93
+
+   63 EXPRESSION: MULTIPLICATIVEEXPRESSION EXPRESSIONREC .
+   65 EXPRESSIONREC: EXPRESSIONREC . '+' MULTIPLICATIVEEXPRESSION
+   66              | EXPRESSIONREC . '-' MULTIPLICATIVEEXPRESSION
+
+    '-'  shift, and go to state 121
+    '+'  shift, and go to state 122
+
+    $default  reduce using rule 63 (EXPRESSION)
+
+
+State 94
+
+   70 MULTIPLICATIVEEXPRESSIONTERM: '*' . TERM MULTIPLICATIVEEXPRESSIONTERM
+
+    IDENTIFIER  shift, and go to state 4
+    NUMBER      shift, and go to state 46
+    '-'         shift, and go to state 47
+    '('         shift, and go to state 64
+
+    TERM            go to state 123
+    VAR             go to state 55
+    IDENTIFIERRULE  go to state 56
+
+
+State 95
+
+   72 MULTIPLICATIVEEXPRESSIONTERM: '%' . TERM MULTIPLICATIVEEXPRESSIONTERM
+
+    IDENTIFIER  shift, and go to state 4
+    NUMBER      shift, and go to state 46
+    '-'         shift, and go to state 47
+    '('         shift, and go to state 64
+
+    TERM            go to state 124
+    VAR             go to state 55
+    IDENTIFIERRULE  go to state 56
+
+
+State 96
+
+   71 MULTIPLICATIVEEXPRESSIONTERM: '/' . TERM MULTIPLICATIVEEXPRESSIONTERM
+
+    IDENTIFIER  shift, and go to state 4
+    NUMBER      shift, and go to state 46
+    '-'         shift, and go to state 47
+    '('         shift, and go to state 64
+
+    TERM            go to state 125
+    VAR             go to state 55
+    IDENTIFIERRULE  go to state 56
+
+
+State 97
+
+   68 MULTIPLICATIVEEXPRESSION: TERM MULTIPLICATIVEEXPRESSIONTERM .
+
+    $default  reduce using rule 68 (MULTIPLICATIVEEXPRESSION)
+
+
+State 98
+
+   73 TERM: IDENTIFIERRULE '(' . TERMEXP ')'
+
+    IDENTIFIER  shift, and go to state 4
+    NUMBER      shift, and go to state 46
+    '-'         shift, and go to state 47
+    '('         shift, and go to state 64
+
+    $default  reduce using rule 80 (TERMEXP)
+
+    EXPRESSION                go to state 126
+    MULTIPLICATIVEEXPRESSION  go to state 53
+    TERM                      go to state 54
+    TERMEXP                   go to state 127
+    VAR                       go to state 55
+    IDENTIFIERRULE            go to state 56
+
+
+State 99
+
+   17 STATEMENT: WHILE BOOLEXPRESSION BEGINLOOP . WHILEREC ENDLOOP
+
+    IF          shift, and go to state 29
+    WHILE       shift, and go to state 30
+    DO          shift, and go to state 31
+    FOR         shift, and go to state 32
+    CONTINUE    shift, and go to state 33
+    READ        shift, and go to state 34
+    WRITE       shift, and go to state 35
+    RETURN      shift, and go to state 36
+    IDENTIFIER  shift, and go to state 4
+
+    $default  reduce using rule 28 (WHILEREC)
+
+    STATEMENT       go to state 128
+    WHILEREC        go to state 129
+    VAR             go to state 39
+    IDENTIFIERRULE  go to state 40
+
+
+State 100
+
+   31 DOREC: STATEMENT . ';' DOREC
+
+    ';'  shift, and go to state 130
+
+
+State 101
+
+   18 STATEMENT: DO BEGINLOOP DOREC . ENDLOOP WHILE BOOLEXPRESSION
+
+    ENDLOOP  shift, and go to state 131
+
+
+State 102
+
+   19 STATEMENT: FOR VAR ASSIGN . NUMBER ';' BOOLEXPRESSION ';' VAR ASSIGN EXPRESSION BEGINLOOP FORREC ENDLOOP
+
+    NUMBER  shift, and go to state 132
+
+
+State 103
+
+   36 READREC: VAR ',' . READREC
+
+    IDENTIFIER  shift, and go to state 4
+
+    $default  reduce using rule 34 (READREC)
+
+    READREC         go to state 133
+    VAR             go to state 61
+    IDENTIFIERRULE  go to state 40
+
+
+State 104
+
+   39 WRITEREC: VAR ',' . WRITEREC
+
+    IDENTIFIER  shift, and go to state 4
+
+    $default  reduce using rule 37 (WRITEREC)
+
+    WRITEREC        go to state 134
+    VAR             go to state 63
+    IDENTIFIERRULE  go to state 40
+
+
+State 105
+
+   76 TERM: '(' EXPRESSION . ')'
+
+    ')'  shift, and go to state 115
+
+
+State 106
+
+    7 FUNCTIONREC2RULE: STATEMENT ';' FUNCTIONREC2RULE .
+
+    $default  reduce using rule 7 (FUNCTIONREC2RULE)
+
+
+State 107
+
+   22 STATEMENT: VAR COMMA EXPRESSION .
+
+    $default  reduce using rule 22 (STATEMENT)
+
+
+State 108
+
+   14 STATEMENT: VAR ASSIGN EXPRESSION .
+
+    $default  reduce using rule 14 (STATEMENT)
+
+
+State 109
+
+   84 VAR: IDENTIFIERRULE '[' EXPRESSION . ']'
+   85    | IDENTIFIERRULE '[' EXPRESSION . ']' '[' EXPRESSION ']'
+
+    ']'  shift, and go to state 135
+
+
+State 110
+
+   10 DECLARATION: DECLARATIONREC ':' ARRAY '[' NUMBER ']' '[' NUMBER ']' . OF INTEGER
+
+    OF  shift, and go to state 136
+
+
+State 111
+
+   55 RELATIONEXPRESSION: NOT '(' BOOLEXPRESSION . ')'
+
+    ')'  shift, and go to state 137
+
+
+State 112
+
+   52 RELATIONEXPRESSION: NOT EXPRESSION COMPARATOR . EXPRESSION
+
+    IDENTIFIER  shift, and go to state 4
+    NUMBER      shift, and go to state 46
+    '-'         shift, and go to state 47
+    '('         shift, and go to state 64
+
+    EXPRESSION                go to state 138
+    MULTIPLICATIVEEXPRESSION  go to state 53
+    TERM                      go to state 54
+    VAR                       go to state 55
+    IDENTIFIERRULE            go to state 56
+
+
+State 113
+
+   79 TERM: '-' '(' EXPRESSION . ')'
+
+    ')'  shift, and go to state 139
+
+
+State 114
+
+   51 RELATIONEXPRESSION: '(' BOOLEXPRESSION ')' .
+
+    $default  reduce using rule 51 (RELATIONEXPRESSION)
+
+
+State 115
+
+   76 TERM: '(' EXPRESSION ')' .
+
+    $default  reduce using rule 76 (TERM)
+
+
+State 116
+
+   27 IFREC: STATEMENT . ';' IFREC
+
+    ';'  shift, and go to state 140
+
+
+State 117
+
+   15 STATEMENT: IF BOOLEXPRESSION THEN IFREC . ENDIF
+   16          | IF BOOLEXPRESSION THEN IFREC . ELSE IFREC ENDIF
+
+    ENDIF  shift, and go to state 141
+    ELSE   shift, and go to state 142
+
+
+State 118
+
+   43 BOOLEXPRESSIONREC: BOOLEXPRESSIONREC OR . RELATIONANDEXPRESSION
+
+    NOT         shift, and go to state 43
+    TRUE        shift, and go to state 44
+    FALSE       shift, and go to state 45
+    IDENTIFIER  shift, and go to state 4
+    NUMBER      shift, and go to state 46
+    '-'         shift, and go to state 47
+    '('         shift, and go to state 48
+
+    RELATIONANDEXPRESSION     go to state 143
+    RELATIONEXPRESSION        go to state 51
+    EXPRESSION                go to state 52
+    MULTIPLICATIVEEXPRESSION  go to state 53
+    TERM                      go to state 54
+    VAR                       go to state 55
+    IDENTIFIERRULE            go to state 56
+
+
+State 119
+
+   47 RELATIONANDEXPRESSIONREC: RELATIONANDEXPRESSIONREC AND . RELATIONEXPRESSION
+
+    NOT         shift, and go to state 43
+    TRUE        shift, and go to state 44
+    FALSE       shift, and go to state 45
+    IDENTIFIER  shift, and go to state 4
+    NUMBER      shift, and go to state 46
+    '-'         shift, and go to state 47
+    '('         shift, and go to state 48
+
+    RELATIONEXPRESSION        go to state 144
+    EXPRESSION                go to state 52
+    MULTIPLICATIVEEXPRESSION  go to state 53
+    TERM                      go to state 54
+    VAR                       go to state 55
+    IDENTIFIERRULE            go to state 56
+
+
+State 120
+
+   48 RELATIONEXPRESSION: EXPRESSION COMPARATOR EXPRESSION .
+
+    $default  reduce using rule 48 (RELATIONEXPRESSION)
+
+
+State 121
+
+   66 EXPRESSIONREC: EXPRESSIONREC '-' . MULTIPLICATIVEEXPRESSION
+
+    IDENTIFIER  shift, and go to state 4
+    NUMBER      shift, and go to state 46
+    '-'         shift, and go to state 47
+    '('         shift, and go to state 64
+
+    MULTIPLICATIVEEXPRESSION  go to state 145
+    TERM                      go to state 54
+    VAR                       go to state 55
+    IDENTIFIERRULE            go to state 56
+
+
+State 122
+
+   65 EXPRESSIONREC: EXPRESSIONREC '+' . MULTIPLICATIVEEXPRESSION
+
+    IDENTIFIER  shift, and go to state 4
+    NUMBER      shift, and go to state 46
+    '-'         shift, and go to state 47
+    '('         shift, and go to state 64
+
+    MULTIPLICATIVEEXPRESSION  go to state 146
+    TERM                      go to state 54
+    VAR                       go to state 55
+    IDENTIFIERRULE            go to state 56
+
+
+State 123
+
+   70 MULTIPLICATIVEEXPRESSIONTERM: '*' TERM . MULTIPLICATIVEEXPRESSIONTERM
+
+    '*'  shift, and go to state 94
+    '%'  shift, and go to state 95
+    '/'  shift, and go to state 96
+
+    $default  reduce using rule 69 (MULTIPLICATIVEEXPRESSIONTERM)
+
+    MULTIPLICATIVEEXPRESSIONTERM  go to state 147
+
+
+State 124
+
+   72 MULTIPLICATIVEEXPRESSIONTERM: '%' TERM . MULTIPLICATIVEEXPRESSIONTERM
+
+    '*'  shift, and go to state 94
+    '%'  shift, and go to state 95
+    '/'  shift, and go to state 96
+
+    $default  reduce using rule 69 (MULTIPLICATIVEEXPRESSIONTERM)
+
+    MULTIPLICATIVEEXPRESSIONTERM  go to state 148
+
+
+State 125
+
+   71 MULTIPLICATIVEEXPRESSIONTERM: '/' TERM . MULTIPLICATIVEEXPRESSIONTERM
+
+    '*'  shift, and go to state 94
+    '%'  shift, and go to state 95
+    '/'  shift, and go to state 96
+
+    $default  reduce using rule 69 (MULTIPLICATIVEEXPRESSIONTERM)
+
+    MULTIPLICATIVEEXPRESSIONTERM  go to state 149
+
+
+State 126
+
+   81 TERMEXP: EXPRESSION .
+   82        | EXPRESSION . ',' TERMEXP
+
+    ','  shift, and go to state 150
+
+    $default  reduce using rule 81 (TERMEXP)
+
+
+State 127
+
+   73 TERM: IDENTIFIERRULE '(' TERMEXP . ')'
+
+    ')'  shift, and go to state 151
+
+
+State 128
+
+   29 WHILEREC: STATEMENT . ';' WHILEREC
+
+    ';'  shift, and go to state 152
+
+
+State 129
+
+   17 STATEMENT: WHILE BOOLEXPRESSION BEGINLOOP WHILEREC . ENDLOOP
+
+    ENDLOOP  shift, and go to state 153
+
+
+State 130
+
+   31 DOREC: STATEMENT ';' . DOREC
+
+    IF          shift, and go to state 29
+    WHILE       shift, and go to state 30
+    DO          shift, and go to state 31
+    FOR         shift, and go to state 32
+    CONTINUE    shift, and go to state 33
+    READ        shift, and go to state 34
+    WRITE       shift, and go to state 35
+    RETURN      shift, and go to state 36
+    IDENTIFIER  shift, and go to state 4
+
+    $default  reduce using rule 30 (DOREC)
+
+    STATEMENT       go to state 100
+    DOREC           go to state 154
+    VAR             go to state 39
+    IDENTIFIERRULE  go to state 40
+
+
+State 131
+
+   18 STATEMENT: DO BEGINLOOP DOREC ENDLOOP . WHILE BOOLEXPRESSION
+
+    WHILE  shift, and go to state 155
+
+
+State 132
+
+   19 STATEMENT: FOR VAR ASSIGN NUMBER . ';' BOOLEXPRESSION ';' VAR ASSIGN EXPRESSION BEGINLOOP FORREC ENDLOOP
+
+    ';'  shift, and go to state 156
+
+
+State 133
+
+   36 READREC: VAR ',' READREC .
+
+    $default  reduce using rule 36 (READREC)
+
+
+State 134
+
+   39 WRITEREC: VAR ',' WRITEREC .
+
+    $default  reduce using rule 39 (WRITEREC)
+
+
+State 135
+
+   84 VAR: IDENTIFIERRULE '[' EXPRESSION ']' .
+   85    | IDENTIFIERRULE '[' EXPRESSION ']' . '[' EXPRESSION ']'
+
+    '['  shift, and go to state 157
+
+    $default  reduce using rule 84 (VAR)
+
+
+State 136
+
+   10 DECLARATION: DECLARATIONREC ':' ARRAY '[' NUMBER ']' '[' NUMBER ']' OF . INTEGER
+
+    INTEGER  shift, and go to state 158
+
+
+State 137
+
+   55 RELATIONEXPRESSION: NOT '(' BOOLEXPRESSION ')' .
+
+    $default  reduce using rule 55 (RELATIONEXPRESSION)
+
+
+State 138
+
+   52 RELATIONEXPRESSION: NOT EXPRESSION COMPARATOR EXPRESSION .
+
+    $default  reduce using rule 52 (RELATIONEXPRESSION)
+
+
+State 139
+
+   79 TERM: '-' '(' EXPRESSION ')' .
+
+    $default  reduce using rule 79 (TERM)
+
+
+State 140
+
+   27 IFREC: STATEMENT ';' . IFREC
+
+    IF          shift, and go to state 29
+    WHILE       shift, and go to state 30
+    DO          shift, and go to state 31
+    FOR         shift, and go to state 32
+    CONTINUE    shift, and go to state 33
+    READ        shift, and go to state 34
+    WRITE       shift, and go to state 35
+    RETURN      shift, and go to state 36
+    IDENTIFIER  shift, and go to state 4
+
+    $default  reduce using rule 26 (IFREC)
+
+    STATEMENT       go to state 116
+    IFREC           go to state 159
+    VAR             go to state 39
+    IDENTIFIERRULE  go to state 40
+
+
+State 141
+
+   15 STATEMENT: IF BOOLEXPRESSION THEN IFREC ENDIF .
+
+    $default  reduce using rule 15 (STATEMENT)
+
+
+State 142
+
+   16 STATEMENT: IF BOOLEXPRESSION THEN IFREC ELSE . IFREC ENDIF
+
+    IF          shift, and go to state 29
+    WHILE       shift, and go to state 30
+    DO          shift, and go to state 31
+    FOR         shift, and go to state 32
+    CONTINUE    shift, and go to state 33
+    READ        shift, and go to state 34
+    WRITE       shift, and go to state 35
+    RETURN      shift, and go to state 36
+    IDENTIFIER  shift, and go to state 4
+
+    $default  reduce using rule 26 (IFREC)
+
+    STATEMENT       go to state 116
+    IFREC           go to state 160
+    VAR             go to state 39
+    IDENTIFIERRULE  go to state 40
+
+
+State 143
+
+   43 BOOLEXPRESSIONREC: BOOLEXPRESSIONREC OR RELATIONANDEXPRESSION .
+
+    $default  reduce using rule 43 (BOOLEXPRESSIONREC)
+
+
+State 144
+
+   47 RELATIONANDEXPRESSIONREC: RELATIONANDEXPRESSIONREC AND RELATIONEXPRESSION .
+
+    $default  reduce using rule 47 (RELATIONANDEXPRESSIONREC)
+
+
+State 145
+
+   66 EXPRESSIONREC: EXPRESSIONREC '-' MULTIPLICATIVEEXPRESSION .
+
+    $default  reduce using rule 66 (EXPRESSIONREC)
+
+
+State 146
+
+   65 EXPRESSIONREC: EXPRESSIONREC '+' MULTIPLICATIVEEXPRESSION .
+
+    $default  reduce using rule 65 (EXPRESSIONREC)
+
+
+State 147
+
+   70 MULTIPLICATIVEEXPRESSIONTERM: '*' TERM MULTIPLICATIVEEXPRESSIONTERM .
+
+    $default  reduce using rule 70 (MULTIPLICATIVEEXPRESSIONTERM)
+
+
+State 148
+
+   72 MULTIPLICATIVEEXPRESSIONTERM: '%' TERM MULTIPLICATIVEEXPRESSIONTERM .
+
+    $default  reduce using rule 72 (MULTIPLICATIVEEXPRESSIONTERM)
+
+
+State 149
+
+   71 MULTIPLICATIVEEXPRESSIONTERM: '/' TERM MULTIPLICATIVEEXPRESSIONTERM .
+
+    $default  reduce using rule 71 (MULTIPLICATIVEEXPRESSIONTERM)
+
+
+State 150
+
+   82 TERMEXP: EXPRESSION ',' . TERMEXP
+
+    IDENTIFIER  shift, and go to state 4
+    NUMBER      shift, and go to state 46
+    '-'         shift, and go to state 47
+    '('         shift, and go to state 64
+
+    $default  reduce using rule 80 (TERMEXP)
+
+    EXPRESSION                go to state 126
+    MULTIPLICATIVEEXPRESSION  go to state 53
+    TERM                      go to state 54
+    TERMEXP                   go to state 161
+    VAR                       go to state 55
+    IDENTIFIERRULE            go to state 56
+
+
+State 151
+
+   73 TERM: IDENTIFIERRULE '(' TERMEXP ')' .
+
+    $default  reduce using rule 73 (TERM)
+
+
+State 152
+
+   29 WHILEREC: STATEMENT ';' . WHILEREC
+
+    IF          shift, and go to state 29
+    WHILE       shift, and go to state 30
+    DO          shift, and go to state 31
+    FOR         shift, and go to state 32
+    CONTINUE    shift, and go to state 33
+    READ        shift, and go to state 34
+    WRITE       shift, and go to state 35
+    RETURN      shift, and go to state 36
+    IDENTIFIER  shift, and go to state 4
+
+    $default  reduce using rule 28 (WHILEREC)
+
+    STATEMENT       go to state 128
+    WHILEREC        go to state 162
+    VAR             go to state 39
+    IDENTIFIERRULE  go to state 40
+
+
+State 153
+
+   17 STATEMENT: WHILE BOOLEXPRESSION BEGINLOOP WHILEREC ENDLOOP .
+
+    $default  reduce using rule 17 (STATEMENT)
+
+
+State 154
+
+   31 DOREC: STATEMENT ';' DOREC .
+
+    $default  reduce using rule 31 (DOREC)
+
+
+State 155
+
+   18 STATEMENT: DO BEGINLOOP DOREC ENDLOOP WHILE . BOOLEXPRESSION
+
+    NOT         shift, and go to state 43
+    TRUE        shift, and go to state 44
+    FALSE       shift, and go to state 45
+    IDENTIFIER  shift, and go to state 4
+    NUMBER      shift, and go to state 46
+    '-'         shift, and go to state 47
+    '('         shift, and go to state 48
+
+    BOOLEXPRESSION            go to state 163
+    RELATIONANDEXPRESSION     go to state 50
+    RELATIONEXPRESSION        go to state 51
+    EXPRESSION                go to state 52
+    MULTIPLICATIVEEXPRESSION  go to state 53
+    TERM                      go to state 54
+    VAR                       go to state 55
+    IDENTIFIERRULE            go to state 56
+
+
+State 156
+
+   19 STATEMENT: FOR VAR ASSIGN NUMBER ';' . BOOLEXPRESSION ';' VAR ASSIGN EXPRESSION BEGINLOOP FORREC ENDLOOP
+
+    NOT         shift, and go to state 43
+    TRUE        shift, and go to state 44
+    FALSE       shift, and go to state 45
+    IDENTIFIER  shift, and go to state 4
+    NUMBER      shift, and go to state 46
+    '-'         shift, and go to state 47
+    '('         shift, and go to state 48
+
+    BOOLEXPRESSION            go to state 164
+    RELATIONANDEXPRESSION     go to state 50
+    RELATIONEXPRESSION        go to state 51
+    EXPRESSION                go to state 52
+    MULTIPLICATIVEEXPRESSION  go to state 53
+    TERM                      go to state 54
+    VAR                       go to state 55
+    IDENTIFIERRULE            go to state 56
+
+
+State 157
+
+   85 VAR: IDENTIFIERRULE '[' EXPRESSION ']' '[' . EXPRESSION ']'
+
+    IDENTIFIER  shift, and go to state 4
+    NUMBER      shift, and go to state 46
+    '-'         shift, and go to state 47
+    '('         shift, and go to state 64
+
+    EXPRESSION                go to state 165
+    MULTIPLICATIVEEXPRESSION  go to state 53
+    TERM                      go to state 54
+    VAR                       go to state 55
+    IDENTIFIERRULE            go to state 56
+
+
+State 158
+
+   10 DECLARATION: DECLARATIONREC ':' ARRAY '[' NUMBER ']' '[' NUMBER ']' OF INTEGER .
+
+    $default  reduce using rule 10 (DECLARATION)
+
+
+State 159
+
+   27 IFREC: STATEMENT ';' IFREC .
+
+    $default  reduce using rule 27 (IFREC)
+
+
+State 160
+
+   16 STATEMENT: IF BOOLEXPRESSION THEN IFREC ELSE IFREC . ENDIF
+
+    ENDIF  shift, and go to state 166
+
+
+State 161
+
+   82 TERMEXP: EXPRESSION ',' TERMEXP .
+
+    $default  reduce using rule 82 (TERMEXP)
+
+
+State 162
+
+   29 WHILEREC: STATEMENT ';' WHILEREC .
+
+    $default  reduce using rule 29 (WHILEREC)
+
+
+State 163
+
+   18 STATEMENT: DO BEGINLOOP DOREC ENDLOOP WHILE BOOLEXPRESSION .
+
+    $default  reduce using rule 18 (STATEMENT)
+
+
+State 164
+
+   19 STATEMENT: FOR VAR ASSIGN NUMBER ';' BOOLEXPRESSION . ';' VAR ASSIGN EXPRESSION BEGINLOOP FORREC ENDLOOP
+
+    ';'  shift, and go to state 167
+
+
+State 165
+
+   85 VAR: IDENTIFIERRULE '[' EXPRESSION ']' '[' EXPRESSION . ']'
+
+    ']'  shift, and go to state 168
+
+
+State 166
+
+   16 STATEMENT: IF BOOLEXPRESSION THEN IFREC ELSE IFREC ENDIF .
+
+    $default  reduce using rule 16 (STATEMENT)
+
+
+State 167
+
+   19 STATEMENT: FOR VAR ASSIGN NUMBER ';' BOOLEXPRESSION ';' . VAR ASSIGN EXPRESSION BEGINLOOP FORREC ENDLOOP
+
+    IDENTIFIER  shift, and go to state 4
+
+    VAR             go to state 169
+    IDENTIFIERRULE  go to state 40
+
+
+State 168
+
+   85 VAR: IDENTIFIERRULE '[' EXPRESSION ']' '[' EXPRESSION ']' .
+
+    $default  reduce using rule 85 (VAR)
+
+
+State 169
+
+   19 STATEMENT: FOR VAR ASSIGN NUMBER ';' BOOLEXPRESSION ';' VAR . ASSIGN EXPRESSION BEGINLOOP FORREC ENDLOOP
+
+    ASSIGN  shift, and go to state 170
+
+
+State 170
+
+   19 STATEMENT: FOR VAR ASSIGN NUMBER ';' BOOLEXPRESSION ';' VAR ASSIGN . EXPRESSION BEGINLOOP FORREC ENDLOOP
+
+    IDENTIFIER  shift, and go to state 4
+    NUMBER      shift, and go to state 46
+    '-'         shift, and go to state 47
+    '('         shift, and go to state 64
+
+    EXPRESSION                go to state 171
+    MULTIPLICATIVEEXPRESSION  go to state 53
+    TERM                      go to state 54
+    VAR                       go to state 55
+    IDENTIFIERRULE            go to state 56
+
+
+State 171
+
+   19 STATEMENT: FOR VAR ASSIGN NUMBER ';' BOOLEXPRESSION ';' VAR ASSIGN EXPRESSION . BEGINLOOP FORREC ENDLOOP
+
+    BEGINLOOP  shift, and go to state 172
+
+
+State 172
+
+   19 STATEMENT: FOR VAR ASSIGN NUMBER ';' BOOLEXPRESSION ';' VAR ASSIGN EXPRESSION BEGINLOOP . FORREC ENDLOOP
+
+    IF          shift, and go to state 29
+    WHILE       shift, and go to state 30
+    DO          shift, and go to state 31
+    FOR         shift, and go to state 32
+    CONTINUE    shift, and go to state 33
+    READ        shift, and go to state 34
+    WRITE       shift, and go to state 35
+    RETURN      shift, and go to state 36
+    IDENTIFIER  shift, and go to state 4
+
+    $default  reduce using rule 32 (FORREC)
+
+    STATEMENT       go to state 173
+    FORREC          go to state 174
+    VAR             go to state 39
+    IDENTIFIERRULE  go to state 40
+
+
+State 173
+
+   33 FORREC: STATEMENT . ';' FORREC
+
+    ';'  shift, and go to state 175
+
+
+State 174
+
+   19 STATEMENT: FOR VAR ASSIGN NUMBER ';' BOOLEXPRESSION ';' VAR ASSIGN EXPRESSION BEGINLOOP FORREC . ENDLOOP
+
+    ENDLOOP  shift, and go to state 176
+
+
+State 175
+
+   33 FORREC: STATEMENT ';' . FORREC
+
+    IF          shift, and go to state 29
+    WHILE       shift, and go to state 30
+    DO          shift, and go to state 31
+    FOR         shift, and go to state 32
+    CONTINUE    shift, and go to state 33
+    READ        shift, and go to state 34
+    WRITE       shift, and go to state 35
+    RETURN      shift, and go to state 36
+    IDENTIFIER  shift, and go to state 4
+
+    $default  reduce using rule 32 (FORREC)
+
+    STATEMENT       go to state 173
+    FORREC          go to state 177
+    VAR             go to state 39
+    IDENTIFIERRULE  go to state 40
+
+
+State 176
+
+   19 STATEMENT: FOR VAR ASSIGN NUMBER ';' BOOLEXPRESSION ';' VAR ASSIGN EXPRESSION BEGINLOOP FORREC ENDLOOP .
+
+    $default  reduce using rule 19 (STATEMENT)
+
+
+State 177
+
+   33 FORREC: STATEMENT ';' FORREC .
+
+    $default  reduce using rule 33 (FORREC)
